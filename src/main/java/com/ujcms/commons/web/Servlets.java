@@ -22,6 +22,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -289,7 +290,12 @@ public class Servlets {
         String msie10 = "trident";
         String msie = "msie";
         if (userAgent.contains(msie10) || userAgent.contains(msie)) {
-            filename = URLEncoder.encode(filename, StandardCharsets.UTF_8);
+            try {
+                filename = URLEncoder.encode(filename, StandardCharsets.UTF_8.name());
+            } catch (UnsupportedEncodingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         } else {
             filename = new String(filename.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
         }
@@ -375,11 +381,11 @@ public class Servlets {
                 String value = matcher.group(3);
                 String decodeValue;
                 if (value != null) {
-                    decodeValue = URLDecoder.decode(value, StandardCharsets.UTF_8);
+                    decodeValue = URLDecoder.decode(value, StandardCharsets.UTF_8.name());
                 } else {
                     decodeValue = StringUtils.isNotBlank(eq) ? "" : null;
                 }
-                queryParams.add(URLDecoder.decode(name, StandardCharsets.UTF_8), decodeValue);
+                queryParams.add(URLDecoder.decode(name, StandardCharsets.UTF_8.name()), decodeValue);
             }
         }
         return queryParams;
