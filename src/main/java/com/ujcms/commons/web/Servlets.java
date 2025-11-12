@@ -379,13 +379,23 @@ public class Servlets {
                 String name = matcher.group(1);
                 String eq = matcher.group(2);
                 String value = matcher.group(3);
-                String decodeValue;
+                String decodeValue = null;
                 if (value != null) {
-                    decodeValue = URLDecoder.decode(value, StandardCharsets.UTF_8.name());
+                    try {
+                        decodeValue = URLDecoder.decode(value, StandardCharsets.UTF_8.name());
+                    } catch (UnsupportedEncodingException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 } else {
                     decodeValue = StringUtils.isNotBlank(eq) ? "" : null;
                 }
-                queryParams.add(URLDecoder.decode(name, StandardCharsets.UTF_8.name()), decodeValue);
+                try {
+                    queryParams.add(URLDecoder.decode(name, StandardCharsets.UTF_8.name()), decodeValue);
+                } catch (UnsupportedEncodingException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         }
         return queryParams;
